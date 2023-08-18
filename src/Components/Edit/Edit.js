@@ -1,7 +1,10 @@
 import { useState } from "react";
 import "./Edit.css";
 import Input from "../Input/Input";
-function Edit({setEdit}) {
+import { useDispatch, useSelector } from "react-redux";
+import { update } from "../../redux/userSlice";
+
+function Edit({ setEdit }) {
   const avaUrl = [
     "https://preview.redd.it/rrz3hmsxcll71.png?width=640&crop=smart&auto=webp&s=87cc5ed38d8f088ef9fffef7a4c5756b64309d6a",
     "https://preview.redd.it/fc9k38jwfwv51.png?auto=webp&s=9ce3d4c488091bb21969fd0fad7a6d89e4bfc50d",
@@ -13,47 +16,57 @@ function Edit({setEdit}) {
     "https://preview.redd.it/cpwkbke13vv51.png?auto=webp&s=9158e49b35ad2581d840efd2a013a9ead06abbc7",
     "https://preview.redd.it/26s9eejm8vz51.png?auto=webp&s=e38d32ee0ffa0666fade2abd62ed59037c119990",
   ];
+  const user = useSelector((state) => state.user);
+  const dispath = useDispatch();
 
-  const [name, setName] = useState("Phuc");
-  const [age, setAge] = useState(20);
-  const [about, setAbout] = useState("about");
+  const [name, setName] = useState(user.name);
+  const [age, setAge] = useState(user.age);
+  const [about, setAbout] = useState(user.about);
+  
   const [theme, setTheme] = useState("#ff9051");
-  const [url, setUrl] = useState(
-    "https://preview.redd.it/rrz3hmsxcll71.png?width=640&crop=smart&auto=webp&s=87cc5ed38d8f088ef9fffef7a4c5756b64309d6a"
-  );
+  const [url, setUrl] = useState(user.avaUrl);
+
   const handleName = (e) => setName(e.target.value);
   const handleAge = (e) => setAge(e.target.value);
   const handleTheme = (e) => setTheme(e.target.value);
   const handleAbout = (e) => setAbout(e.target.value);
-  const handleSubmit = (e) => { 
-    e.preventDefault()
-    setEdit(false)
-  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setEdit(false);
+    const updateUser = {
+      name,
+      about,
+      age,
+      avaUrl: url,
+      themeColor: theme
+    };
+    dispath(update(updateUser));
+  };
   return (
     <>
-      <form >
+      <form>
         <section className="edit-container">
-          <button className="close" onClick={handleSubmit} >SAVE</button>
+          <button className="close" onClick={handleSubmit}>
+            SAVE
+          </button>
           <div className="edit-profile">Edit Profile</div>
           <div className="input-container">
             <Input
               title={"Display name"}
-              placeholder="Enter name"
+              placeholder={user.name}
               handleOnChange={handleName}
             />
             <Input
               title={"Age"}
-              placeholder="Enter age"
+              placeholder={user.age}
               handleOnChange={handleAge}
             />
             <Input
               title={"About"}
-              placeholder="Enter about"
+              placeholder={user.about}
               type="textarea"
               handleOnChange={handleAbout}
             />
-
-            
 
             <label htmlFor="">Profile picture</label>
             <div className="input-image-container">
@@ -63,13 +76,18 @@ function Edit({setEdit}) {
                   src={url}
                   alt=""
                   className="input-image"
-                  onChange={(e) => setUrl(e.target.src)}
+                  onClick={(e) => setUrl(e.target.src)}
                 />
               ))}
             </div>
 
             <div className="theme-container">
-              <Input title={"Theme"} handleOnChange={handleTheme} />
+              <label>Theme</label>
+              <input
+                type="color"
+                className="theme-color"
+                onChange={handleTheme}
+              />
             </div>
           </div>
         </section>
