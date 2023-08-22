@@ -2,7 +2,8 @@ import { useState } from "react";
 import "./Edit.css";
 import Input from "../Input/Input";
 import { useDispatch, useSelector } from "react-redux";
-import { update } from "../../redux/userSlice";
+// import { update } from "../../redux/userSlice";
+import { updateUser } from "../../redux/apiRequests";
 
 function Edit({ setEdit }) {
   const avaUrl = [
@@ -24,7 +25,7 @@ function Edit({ setEdit }) {
   const [about, setAbout] = useState(user.about);
   
   const [theme, setTheme] = useState("#ff9051");
-  const [url, setUrl] = useState(user.avaUrl);
+  const [url, setUrl] = useState(user.avaUrl) ;
 
   const handleName = (e) => setName(e.target.value);
   const handleAge = (e) => setAge(e.target.value);
@@ -33,14 +34,15 @@ function Edit({ setEdit }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     setEdit(false);
-    const updateUser = {
+    const updatedUser = {
       name,
       about,
       age,
       avaUrl: url,
       themeColor: theme
     };
-    dispath(update(updateUser));
+    // dispath(update(updatedUser));
+    updateUser(updatedUser, dispath)
   };
   return (
     <>
