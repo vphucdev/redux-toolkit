@@ -1,17 +1,27 @@
 import "../Edit/Edit.css";
-function Input({ title, handleOnChange = () => {}, placeholder, type }) {
+import "../Posts/Post.css";
+function Input({
+  title,
+  handleOnChange = () => {},
+  placeholder,
+  type,
+  className,
+  data,
+}) {
   return (
     <>
       <label>{title}</label>
       {type === "textarea" ? (
         <textarea
-          className="input-about"
+          type="text"
+          className={className}
           onChange={handleOnChange}
           placeholder={placeholder}
         ></textarea>
       ) : (
         <input
           type="text"
+          className={className}
           placeholder={placeholder}
           onChange={handleOnChange}
         />
